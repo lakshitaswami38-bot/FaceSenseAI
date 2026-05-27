@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% set title = "FaceSense AI – Signup" %}
+
+{% block content %}
+  <section class="panel glass authWrap">
+    <div class="panelHead">
+      <h1 class="panelTitle">Create Your Account</h1>
+      <p class="panelSub">Signup to unlock emotion detection and suggestions.</p>
+    </div>
+
+    {% if error %}
+      <div class="errorBox">
+        <div class="errorTitle">Signup Error</div>
+        <div class="errorText">{{ error }}</div>
+      </div>
+    {% endif %}
+
+    <form method="post" action="{{ url_for('signup_submit') }}" class="authForm">
+      <label class="fieldLabel" for="name">Name</label>
+      <input class="input" id="name" name="name" type="text" required />
+
+      <label class="fieldLabel" for="phone">Phone Number</label>
+      <input class="input" id="phone" name="phone" type="text" required />
+
+      <label class="fieldLabel" for="occupation">Occupation</label>
+      <select class="input" id="occupation" name="occupation" required>
+        <option value="Student">Student</option>
+        <option value="Employee">Employee</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <label class="fieldLabel" for="password">Password</label>
+      <input class="input" id="password" name="password" type="password" required />
+
+      <div class="panelActions">
+        <button class="btn primary" type="submit">Signup</button>
+        <a class="btn subtle" href="{{ url_for('login_page') }}">Already have an account?</a>
+      </div>
+    </form>
+  </section>
+{% endblock %}

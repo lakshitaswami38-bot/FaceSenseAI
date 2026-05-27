@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ title or "FaceSense AI" }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
+    {% block extra_styles %}{% endblock %}
+    <script defer src="{{ url_for('static', filename='js/app.js') }}"></script>
+  </head>
+  <body>
+    <div class="bg"></div>
+    <div class="noise"></div>
+
+    <header class="topbar">
+      <!-- Old code kept for reference:
+      <a class="brand" href="{{ url_for('index') if auth_user else url_for('login_page') }}">
+      -->
+      <a class="brand" href="{{ url_for('index') }}">
+        <span class="brandDot"></span>
+        <span>FaceSense AI</span>
+      </a>
+      <nav class="nav">
+        {% if auth_user %}
+        <a class="navLink" href="{{ url_for('about_page') }}">About Us</a>
+        <a class="navLink" href="{{ url_for('dashboard_page') }}">Dashboard</a>
+        <a class="navLink" href="{{ url_for('select_page') }}">Select</a>
+        <a class="navLink" href="{{ url_for('camera_page') }}">Camera</a>
+        <a class="navLink" href="{{ url_for('text_page') }}">Text</a>
+        <a class="navLink" href="{{ url_for('logout') }}">Logout</a>
+        {% else %}
+        <!-- Old code kept for reference:
+        <a class="navLink" href="{{ url_for('login_page') }}">Login</a>
+        <a class="navLink" href="{{ url_for('signup_page') }}">Signup</a>
+        -->
+        <a class="navLink navAuthLogin" href="{{ url_for('login_page') }}">Login</a>
+        <!-- Old code kept for reference:
+        <a class="navLink navAuthRegister" href="{{ url_for('signup_page') }}">Register</a>
+        -->
+        <a class="navLink" href="{{ url_for('about_page') }}">About Us</a>
+        {% endif %}
+      </nav>
+    </header>
+
+    <main class="container">
+      {% block content %}{% endblock %}
+    </main>
+
+    <div id="loadingOverlay" class="loadingOverlay hidden" aria-hidden="true">
+      <div class="loadingCard glass">
+        <div class="spinner" aria-label="Loading"></div>
+        <div class="loadingTitle">Analyzing…</div>
+        <div class="loadingSub">Please look at the camera / wait a moment.</div>
+      </div>
+    </div>
+
+    {% block extra_scripts %}{% endblock %}
+  </body>
+</html>

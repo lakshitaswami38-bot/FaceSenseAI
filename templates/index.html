@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block title %}FaceSense AI - Emotion Intelligence Platform{% endblock %}
+
+{% block content %}
+<section class="landing-hero">
+  <div class="landing-overlay"></div>
+  <div class="landing-content">
+    {# Old code kept for reference:
+    <span class="badge">Emotion Detection &amp; Suggestions</span>
+    <h1 class="hero-title">How Are You Feeling Today?</h1>
+    <p class="hero-sub">Select your mood, open camera, or type it out - we will understand.</p>
+    #}
+    <!-- Old heading block kept for reference:
+    <span class="landing-tag">Emotion Detection and Wellbeing Insights</span>
+    <h1 class="landing-title">Leaders in Pioneering Actionable Emotion Detection Insights</h1>
+    <p class="landing-subtitle">
+      FaceSense AI helps you understand emotions through AI-powered analysis from mood selection,
+      text, and camera-based cues.
+    </p>
+    -->
+    <h1 class="landing-title">Emotion detection using facial expressions.</h1>
+    <p class="landing-subtitle">Emotion detection using facial expressions.</p>
+    <div class="landing-cta">
+      {# Old code kept for reference:
+      <a href="{{ url_for('select_page') }}" class="action-btn active">Select Your Mood</a>
+      <a href="{{ url_for('camera_page') }}" class="action-btn">Open Camera</a>
+      <a href="{{ url_for('text_page') }}" class="action-btn">Enter Text</a>
+      #}
+      <a href="{{ url_for('login_page') }}" class="landing-btn primary">Login</a>
+      <a href="{{ url_for('signup_page') }}" class="landing-btn secondary">Register</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_styles %}
+<style>
+  /* Old code kept for reference:
+  .hero-wrapper { min-height: calc(100vh - 80px); display: flex; align-items: center; justify-content: center; padding: 2rem; }
+  .hero-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 24px; padding: 3.5rem 4rem; max-width: 900px; width: 100%; }
+  .hero-title { font-size: clamp(2.2rem, 5vw, 3.2rem); font-weight: 800; color: #fff; }
+  .hero-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-bottom: 2rem; }
+  */
+
+  .container {
+    max-width: 100%;
+    margin-top: 16px;
+    padding: 0;
+  }
+
+  .landing-hero {
+    position: relative;
+    min-height: calc(100vh - 120px);
+    width: 100%;
+    padding: 7rem 4rem 6rem;
+    display: flex;
+    align-items: center;
+    background:
+      linear-gradient(rgba(35, 12, 70, 0.68), rgba(19, 8, 48, 0.78)),
+      /* Old image kept for reference:
+      url("https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=1800&q=80")
+      */
+      url("{{ url_for('static', filename='images/p3.avif') }}")
+      center/cover no-repeat;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .landing-overlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 20% 25%, rgba(255, 128, 208, 0.18), transparent 55%);
+    pointer-events: none;
+  }
+
+  .landing-content {
+    position: relative;
+    z-index: 1;
+    width: min(760px, 100%);
+  }
+
+  .landing-title {
+    margin: 0 0 0.75rem;
+    font-size: clamp(2.2rem, 6vw, 5.2rem);
+    line-height: 1.08;
+    letter-spacing: 0;
+    color: #ffffff;
+    max-width: 14ch;
+  }
+
+  .landing-subtitle {
+    margin: 0;
+    max-width: 56ch;
+    color: rgba(255,255,255,0.9);
+    font-size: 1.05rem;
+    line-height: 1.55;
+  }
+
+  .landing-cta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .landing-btn {
+    min-width: 140px;
+    padding: 0.85rem 1.35rem;
+    border-radius: 999px;
+    text-decoration: none;
+    text-align: center;
+    font-weight: 700;
+    border: 1px solid transparent;
+    transition: transform .15s ease, background .2s ease;
+  }
+
+  .landing-btn:hover {
+    transform: translateY(-1px);
+  }
+
+  .landing-btn.primary {
+    background: #8d4bff;
+    border-color: #9f67ff;
+    color: #ffffff;
+  }
+
+  .landing-btn.secondary {
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(255,255,255,0.28);
+    color: #ffffff;
+  }
+
+  @media (max-width: 900px) {
+    .landing-hero {
+      padding: 5rem 1.4rem 4.5rem;
+      min-height: calc(100vh - 130px);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .landing-subtitle {
+      font-size: 1.05rem;
+    }
+
+    .landing-btn {
+      width: 100%;
+    }
+  }
+</style>
+{% endblock %}

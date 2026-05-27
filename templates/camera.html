@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+
+{% block title %}Camera – FaceSense AI{% endblock %}
+
+{% block content %}
+<div class="camera-wrapper">
+  <div class="camera-card">
+    <span class="badge">📷 Camera Mode</span>
+    <h2 class="camera-title">Look at the Camera</h2>
+    <p class="camera-sub">Position your face clearly in the frame. Analysis starts automatically once you click Analyze.</p>
+
+    <div class="feed-container">
+      <!-- FIX: Video feed loads instantly on page load -->
+      <img id="videoFeed" src="{{ url_for('video_feed') }}" alt="Camera feed" />
+      <div id="overlay" class="overlay hidden">
+        <div class="spinner"></div>
+        <p id="overlayText">Analyzing your expression…</p>
+      </div>
+    </div>
+
+    <div class="camera-controls">
+      <button id="analyzeBtn" class="btn-analyze">
+        <span class="btn-icon">🔍</span> Analyze My Expression
+      </button>
+      <a href="{{ url_for('index') }}" class="btn-back">← Back</a>
+    </div>
+
+    <div id="errorBox" class="error-box hidden"></div>
+
+    <ul class="tips">
+      <li>💡 Make sure your face is well-lit and centered.</li>
+      <li>💡 Remove glasses if detection fails.</li>
+      <li>💡 Stay still during the 3-second analysis.</li>
+    </ul>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_styles %}
+<style>
+  .camera-wrapper {
+    min-height: calc(100vh - 80px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .camera-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 24px;
+    padding: 2rem 2.2rem;
+    max-width: 780px;
+    width: 100%;
+    backdrop-filter: blur(16px);
+    box-shadow: 0 24px 64px rgba(0,0,0,0.35);
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 0.35rem 1rem;
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 999px;
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 1.2rem;
+  }
+
+  .camera-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #fff;
+    margin: 0 0 0.5rem;
+  }
+
+  .camera-sub {
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.6);
+    margin: 0 0 1.5rem;
+  }
+
+  .feed-container {
+    position: relative;
+    width: 100%;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #000;
+    aspect-ratio: 16/10;
+    margin-bottom: 1.5rem;
+    max-height:320px
+  }
+
+  #videoFeed {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .overlay.hidden { display: none; }
+
+  .spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid rgba(255,255,255,0.2);
+    border-top-color: #a78bfa;
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .camera-controls {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-analyze {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.9rem 2rem;
+    background: linear-gradient(135deg, #7c3aed, #a855f7);
+    border: none;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+  }
+
+  .btn-analyze:hover { opacity: 0.9; transform: translateY(-1px); }
+  .btn-analyze:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  .btn-back {
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+  }
+  .btn-back:hover { color: #fff; }
+
+  .error-box {
+    background: rgba(239,68,68,0.15);
+    border: 1px solid rgba(239,68,68,0.4);
+    border-radius: 10px;
+    padding: 0.85rem 1.1rem;
+    color: #fca5a5;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+  .error-box.hidden { display: none; }
+
+  .tips {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .tips li {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.4);
+  }
+</style>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  const analyzeBtn = document.getElementById('analyzeBtn');
+  const overlay    = document.getElementById('overlay');
+  const overlayTxt = document.getElementById('overlayText');
+  const errorBox   = document.getElementById('errorBox');
+
+  // FIX: Pre-warm the camera on the server side as soon as this page loads.
+  // The video feed src already starts the stream, but we also hit /camera/start
+  // so that CAMERA.last_frame gets populated before the user clicks Analyze.
+  fetch('/camera/start', { method: 'POST' }).catch(() => {});
+
+  analyzeBtn.addEventListener('click', async () => {
+    analyzeBtn.disabled = true;
+    overlay.classList.remove('hidden');
+    overlayTxt.textContent = 'Analyzing your expression…';
+    errorBox.classList.add('hidden');
+
+    try {
+      const resp = await fetch('/camera', { method: 'POST' });
+      const data = await resp.json();
+
+      if (data.ok) {
+        overlayTxt.textContent = 'Done! Redirecting…';
+        window.location.href = data.redirect;
+      } else {
+        overlay.classList.add('hidden');
+        errorBox.textContent = data.error || 'Analysis failed. Please try again.';
+        errorBox.classList.remove('hidden');
+        analyzeBtn.disabled = false;
+      }
+    } catch (err) {
+      overlay.classList.add('hidden');
+      errorBox.textContent = 'Network error. Please try again.';
+      errorBox.classList.remove('hidden');
+      analyzeBtn.disabled = false;
+    }
+  });
+</script>
+{% endblock %}

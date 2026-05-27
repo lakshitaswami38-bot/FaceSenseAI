@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% set title = "FaceSense AI – Result" %}
+
+{% block content %}
+  <section class="panel glass">
+    <div class="panelHead">
+      <h2 class="panelTitle">Your Result</h2>
+      <p class="panelSub">Source: <span class="chip">{{ result.source }}</span> • <span class="chip">{{ result.ts }}</span></p>
+    </div>
+
+    {% if result.error %}
+      <div class="errorBox">
+        <div class="errorTitle">Camera/Text analysis error</div>
+        <div class="errorText">{{ result.error }}</div>
+        <div class="errorHint">If camera failed, close other apps using the webcam and try again.</div>
+      </div>
+    {% endif %}
+
+    <div class="resultGrid">
+      <div class="resultCard glass2 resultAppear">
+        <div class="resultEmoji">{{ result.suggestion.emoji }}</div>
+        <div class="resultEmotion">
+          {{ result.suggestion.emotion | upper }}
+        </div>
+        <div class="resultMsg">{{ result.suggestion.message }}</div>
+      </div>
+
+      <div class="resultCard glass2">
+        <div class="resultSectionTitle">Activity suggestion</div>
+        <ul class="activityList">
+          {% for item in result.suggestion.activity %}
+            <li>{{ item }}</li>
+          {% endfor %}
+        </ul>
+        <div class="divider"></div>
+        <div class="resultSectionTitle">Entertainment</div>
+        <ul class="linkList">
+          {% for item in result.suggestion.entertainment %}
+            <li><a class="extLink" href="{{ item.url }}" target="_blank" rel="noreferrer">{{ item.label }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    {# Intentionally hiding full probability list for clean output #}
+
+    <div class="panelActions">
+      <a class="btn" href="{{ url_for('select_page') }}">Try Manual Mood</a>
+      <a class="btn" href="{{ url_for('camera_page') }}">Try Camera</a>
+      <a class="btn" href="{{ url_for('camera_page') }}">Try Again</a>
+      <a class="btn" href="{{ url_for('text_page') }}">Try Text</a>
+      <a class="btn subtle" href="{{ url_for('index') }}">Home</a>
+    </div>
+  </section>
+{% endblock %}

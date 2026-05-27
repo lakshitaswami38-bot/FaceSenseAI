@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FaceSense AI - Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script defer src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+  </head>
+  <body data-theme="dark">
+    <div class="dash-app">
+      <aside class="dash-sidebar">
+        <div>
+          <div class="sidebar-brand">
+            <div class="logo-dot"></div>
+            <div class="brand-text">
+              <div class="logo-title">FaceSense AI</div>
+              <div class="logo-sub">Emotion Intelligence</div>
+            </div>
+          </div>
+
+          <p class="sidebar-section-title">MAIN</p>
+          <nav class="sidebar-nav">
+            <button type="button" class="nav-item active" data-section="dashboardSection">Dashboard</button>
+            <button type="button" class="nav-item" data-section="journeySection">Past Mood Journey</button>
+          </nav>
+
+          <p class="sidebar-section-title">FEATURES</p>
+          <nav class="sidebar-nav">
+            <a class="nav-item nav-link" href="{{ url_for('camera_page') }}">Camera Analyzer</a>
+            <a class="nav-item nav-link" href="{{ url_for('text_page') }}">Text Emotion Analyzer</a>
+            <a class="nav-item nav-link" href="{{ url_for('select_page') }}">Mood Selection</a>
+          </nav>
+        </div>
+
+        <div class="sidebar-bottom">
+          <button type="button" class="profile-mini profile-btn" data-section="profileSection">
+            <div class="avatar">{{ (auth_user.name[:1] if auth_user and auth_user.name else "U")|upper }}</div>
+            <div>
+              <div class="profile-name">{{ auth_user.name }}</div>
+              <div class="profile-sub">{{ auth_user.phone }}</div>
+            </div>
+          </button>
+
+          <label class="theme-toggle">
+            <span>Theme</span>
+            <input id="themeToggle" type="checkbox" />
+          </label>
+          <a class="logout-btn" href="{{ url_for('logout') }}">Logout</a>
+        </div>
+      </aside>
+
+      <main class="dash-content">
+        <header class="topbar">
+          <div class="topbar-left">
+            <button type="button" class="sidebar-toggle-btn" id="sidebarToggleBtn" aria-label="Toggle sidebar">☰</button>
+            <h1>Good to see you, {{ auth_user.name }}</h1>
+          </div>
+          <div class="topbar-right">
+            <a class="about-btn" href="{{ url_for('about_page') }}">About Us</a>
+            <div class="streak-pill">🔥 {{ dashboard.streak_days }} day streak</div>
+          </div>
+        </header>
+
+        <section class="dash-section active" id="dashboardSection">
+          <section class="panel quick-access">
+            <h2>Quick Access</h2>
+
+            {# Old code kept for reference:
+            Recent Mood History section removed from dashboard as requested.
+            #}
+
+            <div class="quick-grid">
+              <a class="quick-card" href="{{ url_for('text_page') }}">
+                <img class="quick-asset" src="{{ url_for('static', filename='images/keyboard-card.svg') }}" alt="Keyboard icon" />
+                <span class="quick-icon">⌨</span>
+                <span class="quick-title">Text Emotion Analyzer</span>
+              </a>
+              <a class="quick-card" href="{{ url_for('select_page') }}">
+                <img class="quick-asset" src="{{ url_for('static', filename='images/p3.avif') }}" alt="Emoji mood icon" />
+                <span class="quick-icon">🧩</span>
+                <span class="quick-title">Mood Selection</span>
+              </a>
+              <a class="quick-card" href="{{ url_for('camera_page') }}">
+               <img class="quick-asset" src="https://media.currys.biz/i/currysprod/10247772" alt="Camera" />
+               <span class="quick-icon">📷</span>
+               <span class="quick-title">Camera Analyzer</span>
+              </a>
+              <button type="button" class="quick-card quick-btn" data-open-section="journeySection">
+                <img class="quick-asset" src="https://th.bing.com/th/id/R.56d26ced6dcb54eb07e948c4b73d53a0?rik=rli%2bXuOt%2fkzq9Q&riu=http%3a%2f%2fclipart-library.com%2fimg%2f1616913.jpg&ehk=ZUPgrKNxyPMQPmOuc5Elh8n2bXxdSSNjLYjG4cUPaX0%3d&risl=&pid=ImgRaw&r=0" alt="Graph icon" />
+                <span class="quick-icon">📊</span>
+                <span class="quick-title">Past Mood Journey</span>
+              </button>
+            </div>
+          </section>
+        </section>
+
+        <section class="dash-section" id="journeySection">
+          <section class="panel journey-panel">
+            <div class="panel-head-row">
+              <h2>Past Mood Journey</h2>
+            </div>
+            {% if dashboard.has_chart_data %}
+              <div class="chart-wrap">
+                <canvas id="moodJourneyChart"></canvas>
+              </div>
+            {% else %}
+              <p class="empty-text">No mood data available</p>
+            {% endif %}
+          </section>
+        </section>
+
+        <section class="dash-section" id="profileSection">
+          <section class="panel">
+            <div class="panel-head-row">
+              <h2>Profile</h2>
+            </div>
+            <div class="profile-grid">
+              <div class="profile-detail-card">
+                <div class="profile-detail-label">Name</div>
+                <div class="profile-detail-value">{{ auth_user.name }}</div>
+              </div>
+              <div class="profile-detail-card">
+                <div class="profile-detail-label">Phone</div>
+                <div class="profile-detail-value">{{ auth_user.phone }}</div>
+              </div>
+              <div class="profile-detail-card">
+                <div class="profile-detail-label">Occupation</div>
+                <div class="profile-detail-value">{{ auth_user.occupation }}</div>
+              </div>
+              <div class="profile-detail-card profile-description-card">
+                <div class="profile-detail-label">User Description</div>
+                <p class="profile-description-text">
+                  {{ auth_user.name }} is a {{ auth_user.occupation|lower }} using FaceSense AI to analyze emotions
+                  through camera, text, and mood-based interactions.
+                </p>
+              </div>
+            </div>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <script id="journey-labels" type="application/json">{{ dashboard.chart_labels|tojson }}</script>
+    <script id="journey-counts" type="application/json">{{ dashboard.chart_counts|tojson }}</script>
+  </body>
+</html>

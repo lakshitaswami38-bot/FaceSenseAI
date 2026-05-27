@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% set title = "FaceSense AI – Select Mood" %}
+
+{% block content %}
+  <section class="panel glass">
+    <div class="panelHead">
+      <h2 class="panelTitle">Select Your Mood</h2>
+      <p class="panelSub">Tap a card to get instant suggestions.</p>
+    </div>
+
+    <div class="moodGrid" data-mood-grid>
+      <button class="moodCard" data-emotion="happy" type="button">
+        <div class="moodEmoji">😊</div>
+        <div class="moodLabel">Happy</div>
+      </button>
+      <button class="moodCard" data-emotion="sad" type="button">
+        <div class="moodEmoji">😢</div>
+        <div class="moodLabel">Sad</div>
+      </button>
+      <button class="moodCard" data-emotion="angry" type="button">
+        <div class="moodEmoji">😡</div>
+        <div class="moodLabel">Angry</div>
+      </button>
+      <button class="moodCard" data-emotion="fear" type="button">
+        <div class="moodEmoji">😨</div>
+        <div class="moodLabel">Fear</div>
+      </button>
+      <button class="moodCard" data-emotion="surprise" type="button">
+        <div class="moodEmoji">😲</div>
+        <div class="moodLabel">Surprise</div>
+      </button>
+      <button class="moodCard" data-emotion="neutral" type="button">
+        <div class="moodEmoji">😐</div>
+        <div class="moodLabel">Neutral</div>
+      </button>
+    </div>
+
+    <div class="panelActions">
+      <a class="btn subtle" href="{{ url_for('index') }}">← Back</a>
+    </div>
+  </section>
+{% endblock %}

@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+
+{% block title %}About Us - FaceSense AI{% endblock %}
+
+{% block content %}
+<section class="about-hero">
+  <div class="about-hero-overlay"></div>
+  <div class="about-hero-content">
+    {# Old code kept for reference:
+    <h1>Leaders in Pioneering Actionable Emotion Detection Insights</h1>
+    <p>
+      FaceSense AI combines camera analysis, text understanding, and manual mood input to make emotional insights
+      clear, practical, and accessible.
+    </p>
+    #}
+    <h1>Emotion detection using facial expressions.</h1>
+    <p>Emotion detection using facial expressions.</p>
+    {% if auth_user %}
+      <a class="about-hero-btn" href="{{ url_for('dashboard_page') }}">Go to Dashboard</a>
+    {% else %}
+      <a class="about-hero-btn" href="{{ url_for('login_page') }}">Login</a>
+    {% endif %}
+  </div>
+</section>
+
+<section class="about-story">
+  <div class="about-story-text">
+    <p class="about-label">PROVEN EXPERTISE</p>
+    {# Old heading kept for reference:
+    <h2>Our Story</h2>
+    #}
+    <h2>Description About Us</h2>
+    <p>
+      FaceSense AI is an intelligent emotion-analysis platform designed to help users understand their mood through
+      multiple input modes. The system supports camera-based expression analysis, text-based emotion analysis, and
+      direct mood selection. This multi-input approach makes the platform reliable and convenient for different
+      situations.
+    </p>
+    <p>
+      For camera mode, FaceSense AI captures face frames, validates visibility, and uses DeepFace to classify dominant
+      emotions such as happy, sad, angry, fear, surprise, and neutral. For text mode, the platform analyzes user
+      language patterns and emotional keywords to detect mood. For manual mode, users can directly select how they are
+      feeling for quick input.
+    </p>
+    <p>
+      Every mood result is saved securely to user history. The dashboard then transforms this history into meaningful
+      visuals like the Past Mood Journey graph, frequency tracking, and streak indicators. Along with emotion detection,
+      FaceSense AI also provides suggestions to support reflection, wellbeing, and better daily emotional awareness.
+    </p>
+  </div>
+
+  <div class="about-story-media">
+    <!-- Old images kept for reference:
+    <img src="https://images.unsplash.com/photo-1580894742597-87bc8789db3d?auto=format&fit=crop&w=900&q=80" alt="AI emotion analysis visual 1" />
+    <img src="https://images.unsplash.com/photo-1526378722484-bd91ca387e72?auto=format&fit=crop&w=900&q=80" alt="AI emotion analysis visual 2" />
+    <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=900&q=80" alt="AI emotion analysis visual 3" />
+    <img src="https://images.unsplash.com/photo-1555255707-c07966088b7b?auto=format&fit=crop&w=900&q=80" alt="AI emotion analysis visual 4" />
+    -->
+    <!-- Old image mapping kept for reference:
+    <img src="{{ url_for('static', filename='images/emotion-illustration.jpeg') }}" alt="Emotion illustration" />
+    <img src="{{ url_for('static', filename='images/emotion-search.jpeg') }}" alt="Emotion search visual" />
+    <img src="{{ url_for('static', filename='images/face-scan-icon.jpeg') }}" alt="Face scan icon visual" />
+    <img src="{{ url_for('static', filename='images/emoji-hero.jpeg') }}" alt="Emoji emotion visual" />
+    -->
+    <img src="{{ url_for('static', filename='images/emotion-illustration.jpeg') }}" alt="Emotion illustration" />
+    <img src="{{ url_for('static', filename='images/emotion-search.jpeg') }}" alt="Emotion search visual" />
+    <img src="{{ url_for('static', filename='images/face-scan-icon.jpeg') }}" alt="Face scan icon visual" />
+    <img src="{{ url_for('static', filename='images/p3.avif') }}" alt="Emotion visual" />
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_styles %}
+<style>
+  .container {
+    max-width: 100%;
+    margin: 18px 0 60px;
+    padding: 0;
+  }
+
+  .about-hero {
+    position: relative;
+    min-height: 72vh;
+    display: flex;
+    align-items: center;
+    padding: 4rem clamp(1.4rem, 4vw, 5rem);
+    background:
+      linear-gradient(rgba(22, 6, 52, 0.74), rgba(18, 8, 59, 0.84)),
+      /* Old image kept for reference:
+      url("https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=1800&q=80")
+      */
+      /* Old replacement kept for reference:
+      url("https://images.unsplash.com/photo-1531746790731-6c087fecd65a?auto=format&fit=crop&w=1800&q=80")
+      */
+      /* Old local hero kept for reference:
+      url("{{ url_for('static', filename='images/emoji-hero.jpeg') }}")
+      */
+      url("{{ url_for('static', filename='images/p3.avif') }}")
+      center/cover no-repeat;
+  }
+
+  .about-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 18% 24%, rgba(168, 85, 247, 0.28), transparent 55%);
+  }
+
+  .about-hero-content {
+    position: relative;
+    z-index: 1;
+    width: min(860px, 100%);
+  }
+
+  .about-hero-content h1 {
+    margin: 0 0 1.2rem;
+    font-size: clamp(2.05rem, 5.5vw, 4.3rem);
+    line-height: 1.06;
+    color: #fff;
+    max-width: 14ch;
+  }
+
+  .about-hero-content p {
+    margin: 0 0 1.8rem;
+    color: rgba(255, 255, 255, 0.93);
+    font-size: 1.45rem;
+    line-height: 1.42;
+    max-width: 58ch;
+  }
+
+  .about-hero-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.86rem 1.55rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 700;
+    border: 1px solid rgba(255, 255, 255, 0.32);
+  }
+
+  .about-story {
+    display: grid;
+    grid-template-columns: 1.25fr 1fr;
+    gap: 2rem;
+    background: #f6f7fb;
+    color: #0f172a;
+    padding: clamp(2rem, 4vw, 4rem) clamp(1.2rem, 5vw, 6rem);
+  }
+
+  .about-label {
+    margin: 0 0 .75rem;
+    color: #6d28d9;
+    font-size: 0.92rem;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+  }
+
+  .about-story h2 {
+    margin: 0 0 1rem;
+    font-size: clamp(1.9rem, 4vw, 3rem);
+    line-height: 1.16;
+  }
+
+  .about-story p {
+    margin: 0 0 .95rem;
+    color: #475569;
+    line-height: 1.78;
+    font-size: 1.15rem;
+  }
+
+  .about-story-media {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    align-content: start;
+  }
+
+  .about-story-media img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 14px;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+  }
+
+  @media (max-width: 980px) {
+    .about-story {
+      grid-template-columns: 1fr;
+    }
+    .about-hero-content p {
+      font-size: 1.1rem;
+    }
+  }
+</style>
+{% endblock %}

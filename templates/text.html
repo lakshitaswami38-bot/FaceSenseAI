@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% set title = "FaceSense AI – Text" %}
+
+{% block content %}
+  <section class="panel glass">
+    <div class="panelHead">
+      <h2 class="panelTitle">Text Input Mode</h2>
+      <p class="panelSub">Type how you’re feeling, and we’ll detect the emotion.</p>
+    </div>
+
+    <form class="textForm" data-text-form>
+      <label class="fieldLabel" for="moodText">Type how you're feeling…</label>
+      <textarea
+        id="moodText"
+        name="text"
+        class="textarea"
+        placeholder="Example: I feel stressed and worried about tomorrow…"
+        rows="5"
+        required
+      ></textarea>
+
+      <div class="panelActions">
+        <button class="btn primary" type="submit">
+          <span class="btnIcon">✨</span>
+          <span>Analyze Text</span>
+        </button>
+        <a class="btn subtle" href="{{ url_for('index') }}">← Back</a>
+      </div>
+    </form>
+  </section>
+{% endblock %}

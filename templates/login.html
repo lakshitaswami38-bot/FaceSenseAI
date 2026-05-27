@@ -1,0 +1,324 @@
+{% extends "base.html" %}
+{% set title = "FaceSense AI - Login" %}
+
+{% block content %}
+<section class="login-shell">
+  <div class="login-left">
+    <span class="login-badge">MULTI-MODE EMOTION AI</span>
+    <h1>Your AI-powered emotion detection </h1>
+    <p>
+      Analyze facial expressions, text-based mood, and manual selections in one secure workspace built for practical
+      emotional insights.
+    </p>
+    <ul class="login-points">
+      <li>Camera-based facial emotion detection with DeepFace</li>
+      <li>Text emotion analyzer with fast mood classification</li>
+      <li>Mood history, journey chart, and personalized suggestions</li>
+    </ul>
+  </div>
+
+  <div class="login-right">
+    <div class="login-card">
+      {% set tab = active_tab if active_tab in ["login", "signup"] else "login" %}
+      <div class="login-tabs">
+        <button type="button" class="login-tab {% if tab == 'login' %}active{% endif %}" data-auth-tab="login">Log in</button>
+        <button type="button" class="login-tab {% if tab == 'signup' %}active{% endif %}" data-auth-tab="signup">Sign up</button>
+      </div>
+
+      {% if error %}
+      <div class="errorBox auth-error auth-error-login {% if tab != 'login' %}hidden{% endif %}">
+        <div class="errorTitle">Login Error</div>
+        <div class="errorText">{{ error }}</div>
+      </div>
+      {% endif %}
+
+      {% if signup_error %}
+      <div class="errorBox auth-error auth-error-signup {% if tab != 'signup' %}hidden{% endif %}">
+        <div class="errorTitle">Signup Error</div>
+        <div class="errorText">{{ signup_error }}</div>
+      </div>
+      {% endif %}
+
+      <form method="post" action="{{ url_for('login_submit') }}" class="auth-form auth-form-login {% if tab != 'login' %}hidden{% endif %}" data-auth-form="login">
+        <label for="phone">Phone Number</label>
+        <input id="phone" name="phone" type="text" placeholder="Enter phone number" required />
+
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" placeholder="Enter password" required />
+
+        <div class="login-actions-row">
+          <label class="remember-row">
+            <input type="checkbox" />
+            <span>Remember me</span>
+          </label>
+          <span class="muted-link">Forgot password?</span>
+        </div>
+
+        <button class="login-submit" type="submit">Log in to FaceSense AI</button>
+      </form>
+
+      <form method="post" action="{{ url_for('signup_submit') }}" class="auth-form auth-form-signup {% if tab != 'signup' %}hidden{% endif %}" data-auth-form="signup">
+        <label for="signup_name">Full Name</label>
+        <input id="signup_name" name="name" type="text" placeholder="John Doe" required />
+
+        <label for="signup_phone">Phone Number</label>
+        <input id="signup_phone" name="phone" type="text" placeholder="9876543210" required />
+
+        <label for="signup_occupation">Occupation</label>
+        <select id="signup_occupation" name="occupation" required>
+          <option value="Student">Student</option>
+          <option value="Employee">Employee</option>
+          <option value="Other">Other</option>
+        </select>
+
+        <label for="signup_password">Password</label>
+        <input id="signup_password" name="password" type="password" placeholder="Min. 8 characters" required />
+
+        <button class="login-submit" type="submit">Create free account</button>
+      </form>
+
+      <div class="login-footer">
+        <span data-auth-foot="login" class="{% if tab != 'login' %}hidden{% endif %}">Don't have an account? <button type="button" class="inline-switch" data-auth-tab="signup">Sign up free</button></span>
+        <span data-auth-foot="signup" class="{% if tab != 'signup' %}hidden{% endif %}">Already have an account? <button type="button" class="inline-switch" data-auth-tab="login">Log in</button></span>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_styles %}
+<style>
+  .container {
+    max-width: 1200px;
+    margin-top: 22px;
+  }
+
+  .login-shell {
+    display: grid;
+    grid-template-columns: 1.15fr .85fr;
+    min-height: calc(100vh - 150px);
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 18px;
+    overflow: hidden;
+    background: rgba(7, 15, 40, 0.72);
+  }
+
+  .login-left {
+    padding: clamp(1.4rem, 4vw, 4rem);
+    background:
+      linear-gradient(180deg, rgba(19, 33, 71, 0.82), rgba(10, 21, 51, 0.9)),
+      radial-gradient(circle at 14% 18%, rgba(96, 165, 250, 0.2), transparent 52%);
+    border-right: 1px solid rgba(255,255,255,.1);
+  }
+
+  .login-badge {
+    display: inline-flex;
+    padding: .45rem .9rem;
+    border-radius: 999px;
+    border: 1px solid rgba(125, 211, 252, 0.34);
+    color: #93c5fd;
+    font-weight: 700;
+    font-size: .8rem;
+    letter-spacing: .08em;
+  }
+
+  .login-left h1 {
+    margin: 1.2rem 0 .9rem;
+    font-size: clamp(2rem, 5vw, 3.8rem);
+    line-height: 1.08;
+    max-width: 13ch;
+  }
+
+  .login-left p {
+    margin: 0 0 1.2rem;
+    color: rgba(234,240,255,.8);
+    font-size: 1.3rem;
+    line-height: 1.5;
+    max-width: 56ch;
+  }
+
+  .login-points {
+    margin: 0;
+    padding-left: 1.1rem;
+    color: rgba(234,240,255,.9);
+    line-height: 1.9;
+    font-size: 1.08rem;
+  }
+
+  .login-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.2rem;
+    background: rgba(19, 33, 58, 0.72);
+  }
+
+  .login-card {
+    width: min(430px, 100%);
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.05);
+    border-radius: 16px;
+    padding: 1rem;
+  }
+
+  .login-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: .9rem;
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 12px;
+    padding: 6px;
+  }
+
+  .login-tab {
+    padding: .7rem .9rem;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    text-align: center;
+    color: rgba(234,240,255,.72);
+    text-decoration: none;
+    font-weight: 700;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .login-tab.active {
+    color: #fff;
+    background: rgba(30, 58, 138, 0.56);
+    border-color: rgba(147, 197, 253, 0.28);
+  }
+
+  .auth-form {
+    display: grid;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .auth-form label {
+    font-size: .9rem;
+    color: rgba(234,240,255,.9);
+    font-weight: 600;
+  }
+
+  .auth-form input[type="text"],
+  .auth-form input[type="password"],
+  .auth-form select {
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,.17);
+    background: rgba(6, 13, 31, 0.42);
+    color: #fff;
+    padding: .9rem .95rem;
+    outline: none;
+  }
+
+  .auth-form option {
+    background: #0f172a;
+    color: #fff;
+  }
+
+  .auth-form input:focus,
+  .auth-form select:focus {
+    border-color: rgba(125, 211, 252, 0.45);
+  }
+
+  .login-actions-row {
+    margin-top: .2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .remember-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: rgba(234,240,255,.85);
+    font-size: .9rem;
+  }
+
+  .muted-link {
+    color: #93c5fd;
+    font-size: .9rem;
+  }
+
+  .login-submit {
+    margin-top: 4px;
+    width: 100%;
+    border: 1px solid rgba(125, 211, 252, .35);
+    border-radius: 12px;
+    padding: .86rem 1rem;
+    background: linear-gradient(135deg, #7dd3fc, #60a5fa);
+    color: #0f172a;
+    font-size: 1rem;
+    font-weight: 800;
+    cursor: pointer;
+  }
+
+  .login-footer {
+    margin-top: 14px;
+    text-align: center;
+    color: rgba(234,240,255,.76);
+    font-size: .92rem;
+  }
+
+  .inline-switch {
+    border: none;
+    background: transparent;
+    color: #7dd3fc;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .auth-error {
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  @media (max-width: 980px) {
+    .login-shell {
+      grid-template-columns: 1fr;
+    }
+    .login-left p {
+      font-size: 1.04rem;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  (() => {
+    const tabs = Array.from(document.querySelectorAll("[data-auth-tab]"));
+    const loginForm = document.querySelector("[data-auth-form='login']");
+    const signupForm = document.querySelector("[data-auth-form='signup']");
+    const loginError = document.querySelector(".auth-error-login");
+    const signupError = document.querySelector(".auth-error-signup");
+    const loginFoot = document.querySelector("[data-auth-foot='login']");
+    const signupFoot = document.querySelector("[data-auth-foot='signup']");
+
+    function setTab(tab) {
+      const isLogin = tab === "login";
+      tabs.forEach((el) => el.classList.toggle("active", el.getAttribute("data-auth-tab") === tab));
+      if (loginForm) loginForm.classList.toggle("hidden", !isLogin);
+      if (signupForm) signupForm.classList.toggle("hidden", isLogin);
+      if (loginError) loginError.classList.toggle("hidden", !isLogin);
+      if (signupError) signupError.classList.toggle("hidden", isLogin);
+      if (loginFoot) loginFoot.classList.toggle("hidden", !isLogin);
+      if (signupFoot) signupFoot.classList.toggle("hidden", isLogin);
+    }
+
+    tabs.forEach((tabBtn) => {
+      tabBtn.addEventListener("click", () => setTab(tabBtn.getAttribute("data-auth-tab")));
+    });
+  })();
+</script>
+{% endblock %}
