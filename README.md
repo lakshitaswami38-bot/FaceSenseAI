@@ -1,11 +1,43 @@
 ## FaceSense AI – Emotion Detection & Suggestion System
 
-A mini full-stack Flask project that detects emotion via:
-- **Manual mood selection**
-- **Camera (OpenCV + DeepFace)**
-- **Text input (keyword-based)**
+## Project Description
+FaceSenseAI is an AI-based facial emotion detection and mood analysis system that detects emotions using facial expressions and provides mood-based suggestions and mood journey visualization.
 
-Then it shows a **rule-based suggestion system** (message + activity + entertainment links).
+## Technology Stack
+- Python
+- Flask
+- OpenCV
+- DeepFace / CNN-based emotion recognition
+- HTML, CSS, JavaScript
+- MongoDB / Database
+- GitHub
+
+## Features
+- Facial emotion detection
+- Mood-based suggestions
+- Past mood journey graph
+- Dashboard and login system
+- Emotion visualization and analytics
+
+## Installation / Execution
+1. Install Python
+2. Install requirements:
+pip install -r requirements.txt
+3. Run:
+python app.py
+## Setup (Windows)
+
+Open PowerShell in the `FaceSenseAI` folder:
+
+```bash
+python -m venv .venv
+.\.venv\Scripts\activate
+pip install -r requirements.txt
+python app.py
+```
+
+Then open `http://127.0.0.1:5000/` in your browser.
+
 
 ## Project Structure
 
@@ -27,19 +59,18 @@ FaceSenseAI/
     js/
       app.js
 ```
-
-## Setup (Windows)
-
-Open PowerShell in the `FaceSenseAI` folder:
-
-```bash
-python -m venv .venv
-.\.venv\Scripts\activate
-pip install -r requirements.txt
-python app.py
-```
-
-Then open `http://127.0.0.1:5000/` in your browser.
+## Team Members
+- Lakshita Swami
+- Kushagra Singh
+- Liza Sachdev
+  
+## Screenshots / Output
+- Home Page
+- Dashboard
+- Emotion Detection using Camera
+- Mood Detection Result Page
+- Mood Suggestions Interface
+- Mood Journey / Graph Visualization
 
 ## Notes (Camera Mode)
 
